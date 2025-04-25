@@ -1,1 +1,65 @@
-# demo_game
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网页小游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-container {
+            margin: 20px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+        .qr-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+        }
+        .instructions {
+            padding: 15px;
+            background-color: #eee;
+            border-radius: 5px;
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>欢迎来到我的网页小游戏</h1>
+    
+    <div class="game-container">
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+    </div>
+    
+    <div class="qr-container">
+        <h2>手机扫码体验</h2>
+        <img src="game-qr.png" alt="游戏二维码">
+        <p>或者直接访问: <a href="https://yourusername.github.io/web-game/">https://yourusername.github.io/web-game/</a></p>
+    </div>
+    
+    <div class="instructions">
+        <h3>游戏说明</h3>
+        <p>使用方向键控制球拍，防止球掉落。连续击球得分！</p>
+    </div>
+
+    <script>
+        // 这里将放置游戏代码
+    </script>
+</body>
+</html>
