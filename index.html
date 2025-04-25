@@ -49,8 +49,8 @@
     
     <div class="qr-container">
         <h2>手机扫码体验</h2>
-        <img src="game-qr.png" alt="游戏二维码">
-        <p>或者直接访问: <a href="https://yourusername.github.io/web-game/">https://yourusername.github.io/web-game/</a></p>
+        <img src="demo.png" alt="游戏二维码">
+        <p>或者直接访问: <a href="https://payphone-c.github.io/demo_game/">https://payphone-c.github.io/demo_game/</a></p>
     </div>
     
     <div class="instructions">
@@ -59,7 +59,139 @@
     </div>
 
     <script>
-        // 这里将放置游戏代码
+        // 这里是添加的游戏代码
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 游戏对象
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            dx: 4,
+            dy: -4,
+            radius: 10,
+            color: '#0095DD'
+        };
+
+        const paddle = {
+            width: 100,
+            height: 10,
+            x: (canvas.width - 100) / 2,
+            color: '#0095DD'
+        };
+
+        // 移动控制
+        let rightPressed = false;
+        let leftPressed = false;
+
+        // 添加键盘事件监听器
+        document.addEventListener('keydown', keyDownHandler);
+        document.addEventListener('keyup', keyUpHandler);
+        document.addEventListener('mousemove', mouseMoveHandler);
+
+        function keyDownHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = true;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if (e.key === 'Right' || e.key === 'ArrowRight') {
+                rightPressed = false;
+            } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+                leftPressed = false;
+            }
+        }
+
+        function mouseMoveHandler(e) {
+            const relativeX = e.clientX - canvas.offsetLeft;
+            if (relativeX > 0 && relativeX < canvas.width) {
+                paddle.x = relativeX - paddle.width / 2;
+            }
+        }
+
+        // 绘制球
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = ball.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // 绘制板
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+            ctx.fillStyle = paddle.color;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // 碰撞检测
+        function collisionDetection() {
+            // 球与左右边界碰撞
+            if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
+                ball.dx = -ball.dx;
+            }
+            
+            // 球与顶部边界碰撞
+            if (ball.y + ball.dy < ball.radius) {
+                ball.dy = -ball.dy;
+            } 
+            // 球与板碰撞
+            else if (ball.y + ball.dy > canvas.height - ball.radius - paddle.height) {
+                if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+                    // 根据击球位置改变反弹角度
+                    ball.dy = -ball.dy;
+                    const hitPosition = (ball.x - paddle.x) / paddle.width;
+                    ball.dx = 8 * (hitPosition - 0.5);
+                } 
+                // 球与底部边界碰撞 - 游戏结束
+                else if (ball.y + ball.dy > canvas.height - ball.radius) {
+                    alert('游戏结束！');
+                    document.location.reload();
+                }
+            }
+        }
+
+        // 更新游戏状态
+        function update() {
+            // 移动板
+            if (rightPressed && paddle.x < canvas.width - paddle.width) {
+                paddle.x += 7;
+            } else if (leftPressed && paddle.x > 0) {
+                paddle.x -= 7;
+            }
+            
+            // 移动球
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+            
+            // 检测碰撞
+            collisionDetection();
+        }
+
+        // 绘制游戏
+        function draw() {
+            // 清除画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制游戏元素
+            drawBall();
+            drawPaddle();
+            
+            // 更新游戏状态
+            update();
+            
+            // 继续动画循环
+            requestAnimationFrame(draw);
+        }
+
+        // 开始游戏
+        draw();
     </script>
 </body>
 </html>
